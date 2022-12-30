@@ -31,6 +31,7 @@ const DUMMY_POSTS = [
     date: '2022-12-31',
   },
 ];
+
 export default function HomePage() {
   return (
     <>
