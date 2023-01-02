@@ -6,7 +6,6 @@ import matter from 'gray-matter';
 const postsDirectory = path.join(process.cwd(), 'posts');
 
 export const getPostData = postIdentifier => {
-  debugger;
   const postSlug = postIdentifier.replace(/\.md$/, '');
 
   const filePath = path.join(postsDirectory, `${postSlug}.md`);
