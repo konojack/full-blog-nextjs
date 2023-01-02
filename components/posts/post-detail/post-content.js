@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import classes from './post-content.module.css';
 import PostHeader from './post-header';
 
@@ -17,7 +19,17 @@ const PostContent = ({ postData }) => {
         />
       );
     },
+
+    code(code) {
+      console.log(code);
+      return (
+        <SyntaxHighlighter language="javascript" style={atomDark}>
+          {code.node.children[0].value}
+        </SyntaxHighlighter>
+      );
+    },
   };
+
   return (
     <article class={classes.content}>
       <PostHeader image={imagePath} title={postData.title} />
