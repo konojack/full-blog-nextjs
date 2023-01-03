@@ -21,7 +21,6 @@ const PostContent = ({ postData }) => {
     },
 
     code(code) {
-      console.log(code);
       return (
         <SyntaxHighlighter language="javascript" style={atomDark}>
           {code.node.children[0].value}

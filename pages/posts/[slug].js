@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import PostContent from '../../components/posts/post-detail/post-content';
 import { getPostData, getPostsFiles } from '../../utils/posts-util';
 
@@ -24,7 +25,15 @@ export const getStaticPaths = () => {
 };
 
 const PostDetailPage = ({ postData }) => {
-  return <PostContent postData={postData} />;
+  return (
+    <>
+      <Head>
+        <title>{postData.title}</title>
+        <meta name="description" content={postData.excerpt} />
+      </Head>
+      <PostContent postData={postData} />
+    </>
+  );
 };
 
 export default PostDetailPage;

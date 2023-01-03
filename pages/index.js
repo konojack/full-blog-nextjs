@@ -1,37 +1,7 @@
+import Head from 'next/head';
 import FeaturedPosts from '../components/home-page/featured-posts';
 import Hero from '../components/home-page/hero';
 import { getFeaturedPosts } from '../utils/posts-util';
-
-const DUMMY_POSTS = [
-  {
-    slug: 'slug',
-    title: 'title',
-    image: 'example-image.png',
-    excerpt: 'Blablabla test test',
-    date: '2022-12-31',
-  },
-  {
-    slug: 'slug',
-    title: 'title',
-    image: 'example-image.png',
-    excerpt: 'Blablabla test test',
-    date: '2022-12-31',
-  },
-  {
-    slug: 'slug',
-    title: 'title',
-    image: 'example-image.png',
-    excerpt: 'Blablabla test test',
-    date: '2022-12-31',
-  },
-  {
-    slug: 'slug',
-    title: 'title',
-    image: 'example-image.png',
-    excerpt: 'Blablabla test test',
-    date: '2022-12-31',
-  },
-];
 
 export const getStaticProps = () => {
   const featuredPosts = getFeaturedPosts();
@@ -46,6 +16,13 @@ export const getStaticProps = () => {
 export default function HomePage({ featuredPosts }) {
   return (
     <>
+      <Head>
+        <title>David's Blog</title>
+        <meta
+          name="description"
+          content="I post about programming and a web dev"
+        />
+      </Head>
       <Hero />
       <FeaturedPosts posts={featuredPosts} />
     </>
