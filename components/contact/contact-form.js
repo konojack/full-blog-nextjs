@@ -1,26 +1,86 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Notification from '../ui/notification';
 import classes from './contact-form.module.css';
+
+const sendContactData = async contactDetails => {
+  const response = await fetch('/api/contact', {
+    method: 'POST',
+    body: JSON.stringify(contactDetails),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Something went wrong!');
+  }
+};
 
 const ContactForm = () => {
   const [enteredName, setEnteredName] = useState('');
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredMessage, setEnteredMessage] = useState('');
+  const [requestStatus, setRequestStatus] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const onSubmitHandler = e => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setRequestStatus(null);
+      setErrorMessage(null);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [requestStatus]);
+
+  const onSubmitHandler = async e => {
     e.preventDefault();
 
-    fetch('/api/contact', {
-      method: 'POST',
-      body: JSON.stringify({
+    setRequestStatus('pending');
+
+    try {
+      await sendContactData({
         name: enteredName,
         email: enteredEmail,
         message: enteredMessage,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+      });
+    } catch (err) {
+      setErrorMessage(err.message);
+      setRequestStatus('error');
+    }
+
+    setRequestStatus('success');
+
+    setEnteredEmail('');
+    setEnteredMessage('');
+    setEnteredName('');
   };
+
+  let notification;
+  if (requestStatus === 'pending') {
+    notification = {
+      status: 'pending',
+      title: 'Pending...',
+      message: 'Your message is pending!',
+    };
+  }
+
+  if (requestStatus === 'error') {
+    notification = {
+      status: 'error',
+      title: 'Error!',
+      message: errorMessage,
+    };
+  }
+
+  if (requestStatus === 'success') {
+    notification = {
+      status: 'success',
+      title: 'Success!',
+      message: 'Message sent successfully!',
+    };
+  }
 
   return (
     <section className={classes.contact}>
@@ -61,6 +121,7 @@ const ContactForm = () => {
           <button type="submit">Send Message</button>
         </div>
       </form>
+      {notification && <Notification notification={notification} />}
     </section>
   );
 };
